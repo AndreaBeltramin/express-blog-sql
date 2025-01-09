@@ -3,16 +3,16 @@ const connection = require("../db/connection");
 
 //index => mostra la lista intera dei post
 function index(req, res) {
-	//dichiariamo la lista dei post filtrata = alla lista dei post originale
-	let filteredPosts = [...posts];
-	//se la richiesta contiene un tag come parametro
-	if (req.query.tag) {
-		//allora filtriamo la lista dei post
-		//e cerchiamo se nella lista dei tags di ogni post è incluso il tag cercato
-		filteredPosts = posts.filter((post) => post.tags.includes(req.query.tag));
-	}
-	//diamo in risposta la lista dei post filtrati come oggetto json
-	res.json(filteredPosts);
+	//imposto la query
+	const sql = "SELECT * FROM posts";
+
+	//eseguo la query
+	connection.query(sql, (err, results) => {
+		//messaggio di errore
+		if (err) return res.status(500).json({ error: "Database query failed" });
+		res.json(results);
+		console.log(results);
+	});
 }
 
 //show => mostra un singolo post
