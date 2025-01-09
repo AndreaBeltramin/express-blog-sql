@@ -1,0 +1,21 @@
+{
+	"name": "express-blog-intro",
+	"version": "1.0.0",
+	"description": "creazione blog personale",
+	"main": "app.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node app.js",
+		"dev": "node --watch app.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "express-blog-intro"
+	},
+	"author": "Andrea Beltramin",
+	"license": "ISC",
+	"dependencies": {
+		"cors": "^2.8.5",
+		"express": "^4.21.1"
+	}
+}
