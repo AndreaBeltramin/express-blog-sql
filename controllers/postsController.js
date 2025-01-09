@@ -19,24 +19,25 @@ function index(req, res) {
 function show(req, res) {
 	//recuperiamo l'id dall'URL e lo trasformiamo in un numero
 	const id = parseInt(req.params.id);
-	//cerchiamo il post con quell'id nella lista dei post
-	const post = posts.find((post) => post.id === id);
 
-	//facciamo un controllo se non trovo nessun post con quell'id
-	if (!post) {
-		const err = new Error("Id post not found");
-		err.code = 404;
-		throw err;
-		/*
-		//ritorno uno status 404 e un messaggio di errore
-		return res.status(404).json({
-			error: "Not Found",
-			message: "Post non trovato",
-		});
-		*/
-	}
-	//diamo in risposta il post trovato
-	res.json(post);
+	//imposto la query
+	const sql = "SELECT * FROM posts WHERE id = ?";
+
+	//eseguo la query
+	connection.query(sql, [id], (err, results) => {
+		//messaggio di errore
+		if (err) {
+			console.log(err);
+			return res.status(500).json({ error: "Database query failed" });
+		}
+		if (results.length === 0) {
+			console.log(err);
+			return res.status(404).json({ error: "Post not found" });
+		}
+		const post = results[0];
+		res.json(post);
+		console.log(post);
+	});
 }
 
 //store => creazione di un nuovo post
