@@ -21,22 +21,44 @@ function show(req, res) {
 	const id = parseInt(req.params.id);
 
 	//imposto la query
-	const sql = "SELECT * FROM posts WHERE id = ?";
+	const sqlPost = "SELECT * FROM posts WHERE id = ?";
 
 	//eseguo la query
-	connection.query(sql, [id], (err, results) => {
+	connection.query(sqlPost, [id], (err, postsResults) => {
 		//messaggio di errore
 		if (err) {
 			console.log(err);
 			return res.status(500).json({ error: "Database query failed" });
 		}
-		if (results.length === 0) {
+		//messaggio di errore se non ci sono risultati
+		if (postsResults.length === 0) {
 			console.log(err);
 			return res.status(404).json({ error: "Post not found" });
 		}
-		const post = results[0];
+		//visualizzo il post
+		const post = postsResults[0];
 		res.json(post);
 		console.log(post);
+	});
+
+	//imposto la query
+	const sqlTags = `
+		SELECT tags.* 
+		FROM tags
+		INNER JOIN post_tag
+		ON tags.id = post_tag.tag_id
+		WHERE post_id = ?
+	`;
+
+	//eseguo la query
+	connection.query(sqlTags, [id], (err, tagsResults) => {
+		//messaggio di errore
+		if (err) {
+			console.log(err);
+			return res.status(500).json({ error: "Database query failed" });
+		}
+
+		console.log(tagsResults);
 	});
 }
 
