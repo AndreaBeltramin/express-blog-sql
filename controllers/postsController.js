@@ -132,28 +132,20 @@ function modify(req, res) {
 function destroy(req, res) {
 	//recuperiamo l'id dall'URL e lo trasformiamo in un numero
 	const id = parseInt(req.params.id);
-	//cerchiamo il post con quell'id nella lista dei post
-	const post = posts.find((post) => post.id === id);
 
-	//facciamo un controllo se non trovo nessun post con quell'id
-	if (!post) {
-		const err = new Error("Id post not found");
-		err.code = 404;
-		throw err;
-		/*
-		//ritorno uno status 404 e un messaggio di errore
-		return res.status(404).json({
-			error: "Not Found",
-			message: "Post non trovato",
-		});*/
-	}
+	//imposto la query
+	const sql = "DELETE FROM posts WHERE id = ?";
 
-	//rimuoviamo il post con quell'id dalla lista dei post
-	posts.splice(posts.indexOf(post), 1);
-	//stampiamo in console la lista dei post aggiornata
-	console.log(posts);
-	//diamo una risposta con stato 204 e nessun contenuto
-	res.sendStatus(204);
+	//eseguo la query
+	connection.query(sql, [id], (err) => {
+		//messaggio di errore
+		if (err) {
+			console.log(err);
+			return res.status(500).json({ error: "Failed to delete post" });
+		}
+		//diamo una risposta con stato 204 e nessun contenuto
+		res.sendStatus(204);
+	});
 }
 
 //esporto le funzioni
