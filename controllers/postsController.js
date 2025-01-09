@@ -1,5 +1,5 @@
-//importo la lista dei post
-const posts = require("../data/posts");
+//connetto il database ad Express
+const connection = require("../db/connection");
 
 //index => mostra la lista intera dei post
 function index(req, res) {

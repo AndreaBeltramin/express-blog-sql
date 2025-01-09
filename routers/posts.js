@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const posts = require("../data/posts.js");
 const postsController = require("../controllers/postsController.js");
 
 router.get("/", postsController.index);
